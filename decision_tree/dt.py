@@ -43,19 +43,19 @@ def split_partition(training_data, attri):
 
 # majority voting for classifying the leaf node
 def calculate_majority(training_data):
-    result_dic = {}
-    for input_set in training_data:
-        result = input_set[class_name]
-        if result in result_dic.keys():
-            result_dic[result] += 1
+    table = {}
+    for data in training_data:
+        key = data[class_name]
+        if key in table.keys():
+            table[key] += 1
         else:
-            result_dic[result] = 1
+            table[key] = 1
 
     majority = ''
     max_vote=0
-    for key in result_dic.keys():
-        if result_dic[key] > max_vote :
-            max_vote = result_dic[key]
+    for key in table.keys():
+        if table[key] > max_vote :
+            max_vote = table[key]
             majority = key
     return majority
 
@@ -90,8 +90,8 @@ def generate_tree(training_data, attri_list):
     # check if all attributes are used to split partitions
     if len(attri_list) > 0 :
         subtrees = {}
-        for attri_value, subset in partitions.items():
-            subtrees[attri_value] = generate_tree(subset, attri_list)
+        for attri_value, part in partitions.items():
+            subtrees[attri_value] = generate_tree(part, attri_list)
         subtrees['major'] = calculate_majority(training_data)
         return (best_attri, subtrees)
     else : 

@@ -14,6 +14,22 @@ def search_neighborhoods( id, epsilon):
             neighborhoods.append(key)        
     return neighborhoods
 
+def option(num, cluster_id):
+    # If cluster id is larger than givien cluster number
+    cluster = dict()
+    for idx in range(cluster_id):
+        cluster[idx]= 0
+
+    for value in data_set.values():
+        if value[2] > -1:
+            cluster[value[2]] +=1
+
+    cluster = sorted(cluster.items(), key=lambda item: item[1])
+    cleaning = list()
+    for cl in cluster[:cluster_id - num] :
+        cleaning.append(cl[0])
+    return cleaning
+
 if __name__=='__main__':
 
     if len(sys.argv) != 5 :
@@ -65,10 +81,27 @@ if __name__=='__main__':
                             data_set[new][2] = cluster_id
 
             cluster_id +=1
-            
+
     output = sys.argv[1][:-4]
+    
     for i in range(num):
         with open(output+"_cluster_"+str(i)+".txt",'w') as fp:
             for key, value in data_set.items() :
                 if value[2] == i:
                     fp.write("{}\n".format(key))
+ 
+    # if cluster_id > num:
+    #     condition = option(num, cluster_id)
+    #     for i in range(cluster_id):
+    #         if i not in condition:
+    #             with open(output+"_cluster_"+str(i)+".txt",'w') as fp:
+    #                 for key, value in data_set.items() :
+    #                     if value[2] == i:
+    #                         fp.write("{}\n".format(key))
+       
+    # else: 
+    #     for i in range(num):
+    #         with open(output+"_cluster_"+str(i)+".txt",'w') as fp:
+    #             for key, value in data_set.items() :
+    #                 if value[2] == i:
+    #                     fp.write("{}\n".format(key))
